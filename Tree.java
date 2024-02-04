@@ -179,11 +179,33 @@ public class Tree<E extends Comparable<? super E>> {
      * @return Count of embedded binary search trees
      */
     public int countBST() {
-        // TODO:
-        return 0;
+        return countBSTRec(root);
+    }
+    private int countBSTRec(BinaryTreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+        int count;
+        if (isBST(node, null, null)) {
+            count = 1;
+        } else {
+            count = 0;
+        }
+        count += countBSTRec(node.left);
+        count += countBSTRec(node.right);
+        return count;
     }
 
-
+    private boolean isBST(BinaryTreeNode node, E minValue, E maxValue) {
+        if (node == null) {
+            return true;
+        }
+        if ((minValue == null || node.key.compareTo(minValue) > 0) && (maxValue == null || node.key.compareTo(maxValue) < 0)) {
+            return isBST(node.left, minValue, node.key) && isBST(node.right, node.key, maxValue);
+        } else {
+            return false;
+        }
+    }
     /**
      * Insert into a bst tree; duplicates are allowed
      *
